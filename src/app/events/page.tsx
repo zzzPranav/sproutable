@@ -2,6 +2,7 @@ import Link from "next/link";
 import { DateTime } from "luxon";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CalendarView, type CalendarItem } from "@/components/calendar-view";
+import { QuestCard } from "@/components/game/quest-card";
 import { Markdown } from "@/components/markdown";
 import { getCurrentUser } from "@/lib/auth";
 import { readDb } from "@/lib/data/store";
@@ -14,7 +15,7 @@ import type { Garden, Language } from "@/lib/types";
 const categories = ["workday", "workshop", "meal", "meeting", "other"] as const;
 
 export default async function EventsPage({ searchParams }: {
-  searchParams: Promise<{ month?: string; garden?: string; category?: string; view?: string }>;
+  searchParams: Promise<{ month?: string; garden?: string; category?: string; view?: string; quest?: string; date?: string }>;
 }) {
   const params = await searchParams;
   const t = await getTranslations("eventBoard");
@@ -72,6 +73,7 @@ export default async function EventsPage({ searchParams }: {
         viewerName: user?.name ?? "",
         viewerEmail: user?.email ?? "",
         loggedIn: Boolean(user),
+        saved: Boolean(user && (db.savedEvents ?? []).some((saved) => saved.user_id === user.user_id && saved.event_id === item.eventId && saved.occurrence_date === item.date)),
         slug: garden.slug,
         gardenName: garden.name,
       };
@@ -104,8 +106,30 @@ export default async function EventsPage({ searchParams }: {
           <Link href={user ? "/inbox" : "/login?next=%2Fevents"} className="rounded-full border border-white/50 px-5 py-3 font-semibold">
             {user ? t("inbox", { count: unread }) : t("signIn")}
           </Link>
+          <Link href="/saved" className="rounded-full border border-white/50 px-5 py-3 font-semibold">{t("savedLink")}</Link>
+          <Link href="/volunteer" className="rounded-full border border-white/50 px-5 py-3 font-semibold">{t("volunteerLink")}</Link>
         </div>
       </header>
+      <section className="mt-6" aria-labelledby="community-quests">
+        <h2 id="community-quests" className="font-game text-3xl">{t("questsTitle")}</h2>
+        <p className="mt-1 text-muted">{t("questsHint")}</p>
+        {upcoming.filter((item) => !item.cancelled).length === 0 ? <p className="mt-4 text-muted">{t("questEmpty")}</p> : null}
+        <ul className="mt-4 grid gap-3 lg:grid-cols-3">
+          {upcoming.filter((item) => !item.cancelled).slice(0, 3).map((item) => (
+            <li key={`${item.eventId}-${item.date}`}>
+              <QuestCard
+                garden={item.gardenName ?? ""}
+                title={item.title}
+                when={DateTime.fromISO(item.start, { setZone: true }).setLocale(locale).toFormat("ccc LLL d, t")}
+                detail={item.description.replace(/\s+/g, " ").slice(0, 140)}
+                category={events(item.category as "workday")}
+                href={`/events?quest=${item.eventId}&date=${item.date}${query.toString() ? `&${query.toString()}` : ""}#upcoming`}
+                action={t("joinQuest")}
+              />
+            </li>
+          ))}
+        </ul>
+      </section>
       <form action="/events" className="my-6 flex flex-wrap items-end gap-4 rounded-2xl border border-line bg-card p-5">
         <input type="hidden" name="month" value={cursor.toFormat("yyyy-MM")} />
         <label className="w-full min-w-0 font-semibold sm:w-auto sm:flex-1">{t("garden")}
@@ -129,7 +153,8 @@ export default async function EventsPage({ searchParams }: {
           <p className="mb-5 mt-1 text-muted">{t("window")}</p>
           <CalendarView slug={selected?.slug ?? ""} month={cursor.toFormat("yyyy-MM")} locale={locale} zone={zone}
             items={monthItems} listItems={upcoming} canManage={false} basePath="/events" extraQuery={query.toString()}
-            returnTo={`/events?${query.toString()}`} signInToRsvp initialView={params.view === "month" ? "month" : "list"} />
+            returnTo={`/events?${query.toString()}`} signInToRsvp initialView={params.quest ? "list" : params.view === "month" ? "month" : "list"}
+            initialQuest={params.quest && params.date ? { eventId: params.quest, date: params.date } : null} />
         </section>
         <aside className="space-y-5">
           {managed.length > 0 ? <section className="rounded-3xl border border-line bg-card p-5">

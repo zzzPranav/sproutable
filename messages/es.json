@@ -4,10 +4,26 @@
     "title": "Cultivemos algo juntos.",
     "body": "Encuentra tu lugar en el jardín: explora, participa y celebra lo que aportas.",
     "navigation": "Explora Sproutable",
-    "map": { "title": "Mapa", "body": "Encuentra un jardín comunitario y planea tu próxima visita.", "action": "Explorar el mapa" },
-    "events": { "title": "Eventos", "body": "Participa en jornadas de trabajo, talleres y encuentros comunitarios.", "action": "Ver eventos" },
-    "growing": { "title": "Qué crece", "body": "Explora las camas, sigue el diario y ayuda al jardín a crecer.", "action": "Ver qué crece" },
-    "achievements": { "title": "Logros", "body": "Celebra tus visitas, cosechas y fotos del diario.", "action": "Ver tu progreso" }
+    "map": {
+      "title": "Mapa",
+      "body": "Encuentra un jardín comunitario y planea tu próxima visita.",
+      "action": "Explorar el mapa"
+    },
+    "events": {
+      "title": "Eventos",
+      "body": "Participa en jornadas de trabajo, talleres y encuentros comunitarios.",
+      "action": "Ver eventos"
+    },
+    "growing": {
+      "title": "Qué crece",
+      "body": "Explora las camas, sigue el diario y ayuda al jardín a crecer.",
+      "action": "Ver qué crece"
+    },
+    "achievements": {
+      "title": "Logros",
+      "body": "Celebra tus visitas, cosechas y fotos del diario.",
+      "action": "Ver tu progreso"
+    }
   },
   "achievements": {
     "home": "Volver al inicio",
@@ -24,19 +40,31 @@
     "preview": "Entra para ver tu progreso.",
     "progress": "{count, number} de {target, number}",
     "visits": {
-      "names": { "1": "Primer brote", "5": "Visita habitual", "10": "Raíz de la comunidad" },
+      "names": {
+        "1": "Primer brote",
+        "5": "Visita habitual",
+        "10": "Raíz de la comunidad"
+      },
       "title": "Visitas",
       "description": "Las visitas registradas en el jardín cuentan para estas metas. Las confirmaciones de asistencia a eventos no cuentan como visitas.",
       "milestone": "{count, plural, one {# visita al jardín} other {# visitas al jardín}}"
     },
     "harvests": {
-      "names": { "1": "Primera cosecha", "5": "Buena mano para las plantas", "10": "Orgullo de la cosecha" },
+      "names": {
+        "1": "Primera cosecha",
+        "5": "Buena mano para las plantas",
+        "10": "Orgullo de la cosecha"
+      },
       "title": "Cosechas",
       "description": "Cada entrada del diario que escribas en la etapa de cosecha cuenta como una cosecha, sin importar su peso.",
       "milestone": "{count, plural, one {# cosecha registrada} other {# cosechas registradas}}"
     },
     "photos": {
-      "names": { "1": "Instantánea del jardín", "5": "Historias del jardín", "10": "Guardián de recuerdos" },
+      "names": {
+        "1": "Instantánea del jardín",
+        "5": "Historias del jardín",
+        "10": "Guardián de recuerdos"
+      },
       "title": "Fotos del diario",
       "description": "Cada foto que esté adjunta a una entrada del diario escrita por ti cuenta para estas metas.",
       "milestone": "{count, plural, one {# foto del diario} other {# fotos del diario}}"
@@ -48,7 +76,7 @@
   "map": {
     "home": "Volver al inicio",
     "title": "Mapa de Pittsburgh",
-    "body": "Por ahora el punto de partida es Hamburg Hall. Los jardines comunitarios cercanos están marcados. Más adelante, las visitas en este mapa podrán contar para los logros.",
+    "body": "Jardines comunitarios de Pittsburgh. Activa la ubicación para ver cuáles están cerca. Un pin abre el jardín cuando Sproutable tiene su página.",
     "youAreHere": "Estás aquí",
     "startingPoint": "Punto de partida",
     "liveStart": "Mostrar mi ubicación",
@@ -65,7 +93,8 @@
     "notOnSproutable": "Está en el mapa. Todavía no tiene página en Sproutable.",
     "missingToken": "Agrega un token de Mapbox como NEXT_PUBLIC_MAPBOX_TOKEN para ver el mapa interactivo. La lista de jardines sigue disponible.",
     "listLabel": "Jardines comunitarios cercanos",
-    "mapLabel": "Mapa interactivo"
+    "mapLabel": "Mapa interactivo",
+    "openPin": "Abrir la página del jardín"
   },
   "feedback": {
     "home": "Volver al inicio",
@@ -94,7 +123,13 @@
     "primary": "Principal",
     "skip": "Saltar al contenido",
     "eventBoard": "Tablón de eventos",
-    "feedback": "Comentarios"
+    "feedback": "Comentarios",
+    "achievements": "Logros",
+    "journal": "Diario",
+    "gardener": "Mi jardinero",
+    "buddies": "Compañeros",
+    "saved": "Guardados",
+    "volunteer": "Voluntariado"
   },
   "home": {
     "eyebrow": "Jardines comunitarios",
@@ -138,7 +173,7 @@
     "edit": "Editar esta página",
     "home": "Inicio",
     "events": "Eventos",
-    "chat": "Chat",
+    "chat": "Conversación",
     "beds": "Camas",
     "myBed": "Mi cama",
     "fallback": "Disponible solo en inglés",
@@ -276,6 +311,8 @@
     "going": "Ahí estarás",
     "people": "Número de personas",
     "volunteer": "Puedo ayudar como voluntario",
+    "saveEvent": "Guardar para después",
+    "savedEvent": "Guardado",
     "rsvpNote": "Nota (opcional)",
     "confirm": "Confirmar",
     "cancelRsvp": "Cancelar asistencia",
@@ -347,7 +384,7 @@
     "mark": "Marcar todo como leído"
   },
   "chat": {
-    "title": "Chat",
+    "title": "Conversación",
     "placeholder": "Escribe un mensaje",
     "send": "Enviar",
     "login": "Entra para unirte a la conversación",
@@ -487,7 +524,11 @@
     "overview": "Resumen",
     "newEvent": "Nuevo evento",
     "post": "Publicar aviso",
-    "review": "Revisar solicitudes"
+    "review": "Revisar solicitudes",
+    "gardeners": "Jardineros",
+    "visitTotal": "Visitas al jardín",
+    "yieldTotal": "Cosecha",
+    "pounds": "{pounds} lb"
   },
   "common": {
     "save": "Guardar",
@@ -556,6 +597,8 @@
     "explore": "Explorar eventos",
     "inbox": "Mi bandeja · {count} sin leer",
     "signIn": "Inicia sesión para participar",
+    "savedLink": "Eventos guardados",
+    "volunteerLink": "Voluntariado",
     "garden": "Jardín",
     "allGardens": "Todos los jardines",
     "category": "Tipo de evento",
@@ -570,6 +613,233 @@
     "notices": "Avisos de la comunidad",
     "noticesIntro": "Novedades de tu comunidad de jardinería.",
     "emptyNotices": "Todavía no hay anuncios. Vuelve pronto.",
-    "pinned": "Fijado"
+    "pinned": "Fijado",
+    "questsTitle": "Misiones de la comunidad",
+    "questsHint": "Encuentros amables. Únete y luego ven.",
+    "joinQuest": "Unirme a la misión",
+    "questEmpty": "No hay nada en el tablero en este periodo."
+  },
+  "world": {
+    "eyebrow": "Tu mundo jardín",
+    "title": "Un jardín pequeño que crece cuando tú creces.",
+    "body": "Explora un jardín, visita y echa una mano. Tus visitas y tu ayuda hacen que este mundo esté más vivo.",
+    "guestTitle": "Brote curioso",
+    "guest": "Entra como invitado o inicia sesión para ver crecer a tu jardinero.",
+    "login": "Entrar",
+    "signup": "Crear un jardinero",
+    "scene": "Mundo jardín de Sproutable",
+    "mapKicker": "Mapa",
+    "mapTitle": "Explora los jardines de Pittsburgh",
+    "mapDetail": "Encuentra un jardín y planea una visita.",
+    "eventsKicker": "Tablón",
+    "eventsTitle": "Eventos de hoy",
+    "eventsDetail": "Jornadas, talleres y comidas.",
+    "growingKicker": "Camas",
+    "growingTitle": "¿Qué crece?",
+    "growingDetail": "Mira las plantas y sus historias.",
+    "progressKicker": "Insignias",
+    "progressTitle": "Mi progreso",
+    "progressDetail": "Visitas, cosechas y fotos.",
+    "gardenerKicker": "Tú",
+    "gardenerTitle": "Mi jardinero",
+    "gardenerDetail": "Tu nivel, tu mochila y tus compañeros.",
+    "quests": "Misiones de la comunidad",
+    "questsEmpty": "Ahora no hay encuentros en el tablero.",
+    "joinQuest": "Unirme a la misión",
+    "stories": "Desde las camas",
+    "storiesEmpty": "El diario está en calma. Una visita es un buen comienzo.",
+    "openStory": "Abrir esta planta"
+  },
+  "progress": {
+    "level": "Nivel {level, number}",
+    "xp": "{xp, number} XP",
+    "xpToNext": "{xp, number} XP para {title}",
+    "maxLevel": "Guardián del jardín. Este mundo está en plena flor.",
+    "openGardener": "Abrir mi jardinero",
+    "how": "Cómo crece tu mundo",
+    "xpEach": "{xp, number} XP cada uno",
+    "visit": "Registro en el jardín",
+    "rsvp": "Te uniste a un encuentro",
+    "journal": "Nota del diario",
+    "photo": "Foto del jardín",
+    "harvest": "Cosecha anotada",
+    "levels": {
+      "sprout": "Brote curioso",
+      "visitor": "Visitante del jardín",
+      "helper": "Ayudante del jardín",
+      "gardener": "Jardinero de la comunidad",
+      "steward": "Guardián del jardín"
+    }
+  },
+  "badges": {
+    "title": "Insignias reunidas",
+    "earned": "Conseguida",
+    "locked": "Aún creciendo",
+    "firstSprout": {
+      "name": "Primer brote",
+      "detail": "Regístrate en un jardín."
+    },
+    "explorer": {
+      "name": "Explorador de jardines",
+      "detail": "Regístrate en tres jardines distintos."
+    },
+    "helpingHands": {
+      "name": "Manos que ayudan",
+      "detail": "Únete a una jornada o ofrece tu ayuda en un encuentro."
+    },
+    "harvestHelper": {
+      "name": "Ayuda en la cosecha",
+      "detail": "Anota una cosecha en el diario de una cama."
+    },
+    "gardenStory": {
+      "name": "Historia del jardín",
+      "detail": "Escribe tu primera nota."
+    },
+    "snapshot": {
+      "name": "Foto del jardín",
+      "detail": "Añade una foto a una nota."
+    },
+    "returnVisit": {
+      "name": "Vuelve pronto",
+      "detail": "Regístrate dos veces en el mismo jardín."
+    },
+    "gardenBuddy": {
+      "name": "Compañero de jardín",
+      "detail": "Asiste a un encuentro al que también va otra persona."
+    },
+    "seasonFriend": {
+      "name": "Amigo de la temporada",
+      "detail": "Promete una aportación al fondo de la temporada."
+    },
+    "toolShare": {
+      "name": "Herramientas compartidas",
+      "detail": "Ofrece un objeto que el jardín pidió."
+    }
+  },
+  "journalHub": {
+    "add": "+ Diario",
+    "home": "Volver al mundo jardín",
+    "title": "Diario del jardín",
+    "body": "Una nota, una foto o lo que hiciste hoy. Queda en tu cama y suma a tu jardinero.",
+    "savedHint": "Guardar una nota suma XP de diario. Una foto y una cosecha suman un poco más.",
+    "login": "Entra para escribir",
+    "guest": "Entra para anotar una visita, una planta o una foto.",
+    "none": "Todavía no tienes una cama asignada. Visita un jardín, pide una cama al guardián y vuelve aquí.",
+    "find": "Buscar un jardín",
+    "yourBeds": "Tus camas",
+    "recent": "Notas recientes de los jardines",
+    "open": "Abrir esta planta"
+  },
+  "gardenerPage": {
+    "home": "Volver al mundo jardín",
+    "title": "Mi jardinero",
+    "body": "Este es el registro de lo que has dado a los jardines. Crece cuando visitas, ayudas y lo escribes.",
+    "guest": "Entra para ver tu nivel, tus insignias y a quienes cultivan a tu lado.",
+    "login": "Entrar",
+    "buddies": "En el jardín contigo",
+    "buddiesBody": "Vecinos que han estado en jardines que compartes, o que han escrito en las camas.",
+    "buddiesEmpty": "Aún no hay compañeros. Una visita es una buena forma de encontrarlos.",
+    "openBuddies": "Compañeros de jardín"
+  },
+  "plant": {
+    "back": "Volver a qué crece",
+    "quiet": "Esta cama espera su próxima nota.",
+    "journal": "Diario de la cama",
+    "empty": "Todavía no hay notas.",
+    "harvest": "{amount} {unit}",
+    "participate": "Formas de participar",
+    "visit": "Visitar el jardín",
+    "events": "Ver encuentros",
+    "help": "Ayudar con donaciones"
+  },
+  "ties": {
+    "favorite": "Marcar este jardín",
+    "favorited": "Marcado",
+    "commit": "Soy jardinero aquí",
+    "committed": "Jardinero aquí",
+    "volunteer": "Puedo ser voluntario",
+    "volunteering": "Voluntario aquí"
+  },
+  "buddiesPage": {
+    "title": "Compañeros de jardín",
+    "body": "Invita a alguien con quien cultivas y déjale una nota corta. Es un saludo, no una competencia.",
+    "guest": "Entra para encontrar compañeros y enviar una nota.",
+    "login": "Entrar",
+    "back": "Volver a mi jardinero",
+    "requests": "Quieren ser compañeros",
+    "noRequests": "Nadie está esperando tu respuesta.",
+    "accept": "Aceptar",
+    "decline": "Ahora no",
+    "yours": "Tus compañeros",
+    "noneYet": "Aún no tienes compañeros. Invita a alguien abajo.",
+    "noteLabel": "Nota",
+    "notePlaceholder": "Una nota corta",
+    "send": "Enviar",
+    "invite": "Gente de tus jardines",
+    "inviteBody": "Estos vecinos aparecen en jardines que visitaste, a los que te uniste o que marcaste.",
+    "waiting": "Esperando a {names}",
+    "ask": "Pedir ser compañeros",
+    "someone": "Jardinero"
+  },
+  "roster": {
+    "title": "Jardineros de este jardín",
+    "body": "Quienes marcaron este jardín, dijeron que cultivan aquí, se unieron o se registraron. Puedes publicar un evento o dar una insignia.",
+    "publish": "Publicar un evento",
+    "empty": "Todavía no hay jardineros vinculados.",
+    "favorite": "Marcado",
+    "committed": "Se comprometió como jardinero",
+    "approved": "Miembro",
+    "pending": "Pidió unirse",
+    "counts": "{visits, number} registros · {journals, number} notas · {harvests, number} cosechas",
+    "visitTotal": "Visitas al jardín",
+    "yieldTotal": "Cosecha",
+    "pounds": "{pounds} lb",
+    "here": "{visits, number} visitas aquí · {pounds} lb cosechadas",
+    "volunteer": "Voluntario",
+    "award": "Insignia",
+    "note": "Nota",
+    "give": "Dar insignia"
+  },
+  "awards": {
+    "title": "De un guardián del jardín",
+    "body": "Un coordinador puede darlas. Van junto a las insignias que ganas tú.",
+    "fromGarden": "Otorgada",
+    "fromManager": "Un guardián puede darla",
+    "bedKeeper": {
+      "name": "Cuidador de cama",
+      "detail": "Cuidó una cama con esmero."
+    },
+    "workdayStar": {
+      "name": "Estrella de la jornada",
+      "detail": "Vino y ayudó en una jornada."
+    },
+    "welcomeNeighbor": {
+      "name": "Vecino que recibe",
+      "detail": "Ayudó a alguien a sentirse en casa."
+    },
+    "harvestHand": {
+      "name": "Mano de la cosecha",
+      "detail": "Ayudó a recoger la cosecha."
+    }
+  },
+  "savedPage": {
+    "title": "Eventos guardados",
+    "body": "Encuentros que guardaste y aquellos a los que ya dijiste que irás.",
+    "signedOut": "Entra para ver los eventos que guardaste o a los que piensas ir.",
+    "signIn": "Entrar",
+    "empty": "Todavía no hay nada guardado. Abre un evento y elige Guardar para después.",
+    "going": "Ahí estarás",
+    "interested": "Guardado",
+    "open": "Abrir evento",
+    "remove": "Quitar"
+  },
+  "volunteerPage": {
+    "title": "Voluntariado",
+    "body": "No necesitas un bancal para ayudar. Estas jornadas están abiertas a quienes visitan y quieren echar una mano.",
+    "signIn": "Entra para ofrecer tu ayuda",
+    "empty": "No hay jornadas públicas en el calendario ahora mismo.",
+    "help": "Voy a ayudar",
+    "helping": "Vas a ayudar",
+    "garden": "Página del jardín"
   }
 }

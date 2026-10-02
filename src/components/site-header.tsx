@@ -10,6 +10,7 @@ import type { Language } from "@/lib/types";
 
 export async function SiteHeader() {
   const t = await getTranslations("nav");
+  const journal = await getTranslations("journalHub");
   const locale = (await getLocale()) as Language;
   const user = await getCurrentUser();
   const db = user ? await readDb() : null;
@@ -18,7 +19,7 @@ export async function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-line/80 bg-[#f7f1e4]/75 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 px-4 py-3">
-        <Link href="/" className="mr-1 text-xl font-bold tracking-tight text-primary">
+        <Link href="/" className="mr-1 font-game text-2xl leading-none text-primary">
           Sproutable
         </Link>
         <nav className="flex flex-wrap items-center gap-1" aria-label={t("primary")}>
@@ -31,14 +32,26 @@ export async function SiteHeader() {
           <NavLink href="/events" className="inline-flex min-h-11 items-center rounded-full px-3 font-semibold hover:bg-white aria-[current=page]:bg-white">
             {t("eventBoard")}
           </NavLink>
+          <NavLink href="/saved" className="inline-flex min-h-11 items-center rounded-full px-3 font-semibold hover:bg-white aria-[current=page]:bg-white">
+            {t("saved")}
+          </NavLink>
+          <NavLink href="/volunteer" className="inline-flex min-h-11 items-center rounded-full px-3 font-semibold hover:bg-white aria-[current=page]:bg-white">
+            {t("volunteer")}
+          </NavLink>
           <NavLink href="/growing" className="inline-flex min-h-11 items-center rounded-full px-3 font-semibold hover:bg-white aria-[current=page]:bg-white">
             {t("growing")}
+          </NavLink>
+          <NavLink href="/achievements" className="inline-flex min-h-11 items-center rounded-full px-3 font-semibold hover:bg-white aria-[current=page]:bg-white">
+            {t("achievements")}
           </NavLink>
           <NavLink href="/feedback" className="inline-flex min-h-11 items-center rounded-full px-3 font-semibold hover:bg-white aria-[current=page]:bg-white">
             {t("feedback")}
           </NavLink>
         </nav>
         <div className="ml-auto flex items-center gap-2">
+          <Link href="/journal" className="game-btn inline-flex min-h-11 shrink-0 items-center bg-[#e3b23c] px-3 font-game text-base text-[#3d2914] sm:text-lg">
+            {journal("add")}
+          </Link>
           <LanguageSwitcher locale={locale} label={t("language")} />
           {user ? (
             <>
@@ -55,6 +68,15 @@ export async function SiteHeader() {
                   {user.name.split(" ")[0]}
                 </summary>
                 <div className="absolute right-0 mt-2 w-48 rounded-2xl border border-line bg-card p-2 shadow-lg">
+                  <Link className="block rounded-xl px-3 py-2 hover:bg-background" href="/buddies">
+                    {t("buddies")}
+                  </Link>
+                  <Link className="block rounded-xl px-3 py-2 hover:bg-background" href="/gardener">
+                    {t("gardener")}
+                  </Link>
+                  <Link className="block rounded-xl px-3 py-2 hover:bg-background" href="/journal">
+                    {t("journal")}
+                  </Link>
                   <Link className="block rounded-xl px-3 py-2 hover:bg-background" href="/dashboard">
                     {t("dashboard")}
                   </Link>
@@ -71,10 +93,10 @@ export async function SiteHeader() {
             </>
           ) : (
             <>
-              <Link href="/login" className="rounded-full px-3 py-2 font-semibold">
+              <Link href="/login" className="whitespace-nowrap rounded-full px-3 py-2 font-semibold">
                 {t("login")}
               </Link>
-              <Link href="/signup" className="rounded-full bg-accent px-4 py-2 font-semibold text-accent-foreground">
+              <Link href="/signup" className="whitespace-nowrap rounded-full bg-accent px-4 py-2 font-semibold text-accent-foreground">
                 {t("signup")}
               </Link>
             </>

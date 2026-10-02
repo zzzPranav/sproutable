@@ -1,14 +1,25 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { AchievementCard } from "@/components/achievement-card";
+import { BadgeCard } from "@/components/game/badge-card";
+import { XpMeter } from "@/components/game/xp-meter";
 import { achievementCategories, achievementMilestones, participationTotals } from "@/lib/achievements";
 import { getCurrentUser } from "@/lib/auth";
 import { readDb } from "@/lib/data/store";
+import { managerAwardIds } from "@/lib/awards";
+import { badgeIds, badgeState, emptyBadges, progressFor } from "@/lib/progression";
 
 export default async function AchievementsPage() {
   const t = await getTranslations("achievements");
+  const progress = await getTranslations("progress");
+  const badges = await getTranslations("badges");
+  const awards = await getTranslations("awards");
   const user = await getCurrentUser();
-  const totals = user ? participationTotals(await readDb(), user.user_id) : null;
+  const db = await readDb();
+  const totals = user ? participationTotals(db, user.user_id) : null;
+  const stats = user ? progressFor(db, user.user_id) : null;
+  const collected = user ? badgeState(db, user.user_id) : emptyBadges();
+  const nextLevelId = stats?.levelId === "sprout" ? "visitor" : stats?.levelId === "visitor" ? "helper" : stats?.levelId === "helper" ? "gardener" : "steward";
   const earned = totals ? achievementCategories.reduce(
     (sum, category) => sum + achievementMilestones.filter((target) => totals[category] >= target).length,
     0,
@@ -17,8 +28,41 @@ export default async function AchievementsPage() {
   return (
     <section className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
       <Link href="/" className="font-semibold text-primary underline">{t("home")}</Link>
-      <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-6xl">{t("title")}</h1>
+      <h1 className="mt-4 font-game text-4xl tracking-tight sm:text-6xl">{t("title")}</h1>
       <p className="mt-4 max-w-2xl text-xl text-muted">{t("body")}</p>
+      {stats ? (
+        <div className="mt-6 max-w-md rounded-2xl border border-line bg-card p-4">
+          <XpMeter
+            levelLabel={progress("level", { level: stats.level })}
+            title={progress(`levels.${stats.levelId}`)}
+            xpLabel={progress("xp", { xp: stats.xp })}
+            nextLabel={stats.nextLevelXp === null ? progress("maxLevel") : progress("xpToNext", { xp: stats.nextLevelXp - stats.xp, title: progress(`levels.${nextLevelId}`) })}
+            value={stats.span === 0 ? 1 : stats.intoLevel}
+            max={stats.span === 0 ? 1 : stats.span}
+          />
+          <Link href="/gardener" className="mt-3 inline-flex min-h-11 items-center font-semibold text-primary underline">{progress("openGardener")}</Link>
+        </div>
+      ) : null}
+      <h2 className="mt-8 font-game text-3xl">{badges("title")}</h2>
+      <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {badgeIds.map((id) => (
+          <li key={id}>
+            <BadgeCard name={badges(`${id}.name`)} detail={badges(`${id}.detail`)} earned={collected[id]} status={collected[id] ? badges("earned") : badges("locked")} />
+          </li>
+        ))}
+      </ul>
+      <h2 className="mt-8 font-game text-3xl">{awards("title")}</h2>
+      <p className="mt-2 max-w-2xl text-muted">{awards("body")}</p>
+      <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {managerAwardIds.map((id) => {
+          const given = user ? (db.awardedBadges ?? []).filter((award) => award.user_id === user.user_id && award.badge_id === id) : [];
+          return (
+            <li key={id}>
+              <BadgeCard name={awards(`${id}.name`)} detail={given[0]?.note || awards(`${id}.detail`)} earned={given.length > 0} status={given.length > 0 ? awards("fromGarden") : awards("fromManager")} />
+            </li>
+          );
+        })}
+      </ul>
       {totals ? (
         <>
           <p className="mt-6 inline-flex items-center gap-2 rounded-full border border-line bg-card px-3 py-1 text-sm font-semibold text-primary">

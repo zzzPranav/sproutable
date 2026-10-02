@@ -6,12 +6,12 @@ import { Button } from "@/components/button";
 import { Field, TextArea, TextInput } from "@/components/field";
 import { getCurrentUser } from "@/lib/auth";
 import { readDb } from "@/lib/data/store";
+import { CropMark } from "@/components/game/crop-mark";
 import { GardenCover } from "@/components/garden-cover";
-import { cropPhoto } from "@/lib/crop-photos";
 import { BEECHVIEW_SLUG, formatDollars, SEASON_FUND_GOAL_CENTS } from "@/lib/growing";
 import { managesGarden } from "@/lib/permissions";
 import { claimNeed, markReceived, offerItem, pledgeMoney, postNeed } from "@/server/growing-actions";
-import type { Bed, JournalEntry, JournalStage, Language } from "@/lib/types";
+import type { JournalEntry, JournalStage, Language } from "@/lib/types";
 
 const stages = ["planted", "growing", "maintenance", "harvest"] as const;
 
@@ -39,9 +39,6 @@ export default async function GrowingPage({
   }
 
   const manager = user ? managesGarden(db, user.user_id, garden.garden_id) : false;
-  const managerIds = new Set(
-    db.gardenManagers.filter((row) => row.garden_id === garden.garden_id).map((row) => row.user_id),
-  );
   const beds = db.beds.filter((bed) => bed.garden_id === garden.garden_id);
   const entries = db.journalEntries
     .filter((entry) => entry.garden_id === garden.garden_id)
@@ -61,13 +58,6 @@ export default async function GrowingPage({
   const pledged = pledges.reduce((sum, item) => sum + item.amount_cents, 0);
   const percent = Math.min(100, Math.round((pledged / SEASON_FUND_GOAL_CENTS) * 100));
   const harvestLb = Math.round(entries.reduce((sum, entry) => sum + (entry.harvest_unit === "lb" ? entry.harvest_amount ?? 0 : 0), 0) * 10) / 10;
-
-  function person(bed: Bed) {
-    if (!bed.assigned_user_id) return t("open");
-    if (managerIds.has(bed.assigned_user_id)) return t("shared");
-    const holder = db.users.find((item) => item.user_id === bed.assigned_user_id);
-    return t("leased", { name: holder?.name.split(" ")[0] ?? "" });
-  }
 
   function when(entry: JournalEntry) {
     const parsed = DateTime.fromISO(entry.entry_date);
@@ -134,24 +124,18 @@ export default async function GrowingPage({
             ))}
           </div>
           {shown.length === 0 ? <p className="mt-6 text-muted">{t("emptyBeds")}</p> : null}
-          <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+          <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {shown.map((bed) => {
               const latest = latestByBed.get(bed.bed_id);
-              const photo = cropPhoto(latest?.crop ?? "");
+              const label = latest?.crop || t("noCrop");
               return (
-                <li key={bed.bed_id} className="overflow-hidden rounded-2xl border border-line bg-background">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={photo} alt={latest?.crop ? t("photo", { crop: latest.crop }) : bed.label} className="h-36 w-full object-cover" />
-                  <div className="p-4">
-                    <p className="text-sm font-semibold text-primary">{bed.label}</p>
-                    <p className="mt-1 text-xl font-semibold">{latest?.crop || t("noCrop")}</p>
-                    <p className="mt-1 text-sm text-muted">
-                      {person(bed)}
-                      {latest ? ` · ${bedsT(latest.stage)}` : ""}
-                      {bed.size ? ` · ${bed.size}` : ""}
-                    </p>
-                    {latest ? <p className="mt-3">{latest.text}</p> : <p className="mt-3 text-muted">{bed.notes}</p>}
-                  </div>
+                <li key={bed.bed_id}>
+                  <Link href={`/growing/${bed.bed_id}`} className="game-panel flex h-full flex-col items-center bg-[#e7f3dc] p-3 text-center">
+                    <span className="rounded-md border-[3px] border-[#3d2914] bg-[#c4a574] p-1">
+                      <CropMark crop={latest?.crop ?? ""} className="plant-sway h-20 w-20" />
+                    </span>
+                    <span className="mt-2 font-game text-xl leading-tight text-[#3d2914]">{label}</span>
+                  </Link>
                 </li>
               );
             })}
@@ -169,7 +153,6 @@ export default async function GrowingPage({
                     {entry.crop ? ` · ${entry.crop}` : ""}
                   </p>
                   <p className="mt-1 text-sm font-semibold text-primary">{bedsT(entry.stage)}</p>
-                  <p className="mt-2">{entry.text}</p>
                   {entry.harvest_amount ? (
                     <p className="mt-1 text-sm">
                       {entry.harvest_amount} {entry.harvest_unit}
