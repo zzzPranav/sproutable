@@ -31,11 +31,12 @@ export default async function AchievementsPage() {
       <Link href="/" className="font-semibold text-primary underline">{t("home")}</Link>
       <h1 className="mt-4 font-game text-4xl tracking-tight sm:text-6xl">{t("title")}</h1>
       <p className="mt-4 max-w-2xl text-xl text-muted">{t("body")}</p>
-      <div className="mt-6 rounded-3xl border border-line bg-card p-5">
-        <h2 className="font-game text-3xl text-[#3d2914]">{t("growthTitle")}</h2>
-        <p className="mt-2 max-w-xl text-muted">{t("growthBody")}</p>
-        <div className="mt-4">
-          <GrowthTree
+      <div className="mt-6 overflow-hidden rounded-3xl border-4 border-[#3d2914] bg-card shadow-[5px_5px_0_#3d2914]">
+        <div className="p-5">
+          <h2 className="font-game text-3xl text-[#3d2914]">{t("growthTitle")}</h2>
+          <p className="mt-2 max-w-xl text-muted">{t("growthBody")}</p>
+        </div>
+        <GrowthTree
             level={stats?.level ?? 1}
             you={stats ? t("you") : t("guestMark")}
             start={t("start")}
@@ -48,7 +49,6 @@ export default async function AchievementsPage() {
               sprout: t("stages.sprout"),
             }}
           />
-        </div>
       </div>
       {stats ? (
         <div className="mt-6 max-w-md rounded-2xl border border-line bg-card p-4">

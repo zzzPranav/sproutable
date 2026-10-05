@@ -4,17 +4,20 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { GardenMap } from "@/components/garden-map";
-import { HOME_BASE, milesBetween, type NearbyGarden } from "@/lib/nearby-gardens";
+import { GardenVisitCard } from "@/components/garden-visit-card";
+import { ARRIVAL_MILES, HOME_BASE, milesBetween, type NearbyGarden } from "@/lib/nearby-gardens";
 
 type LiveFix = { lat: number; lng: number };
 
 export function MapExplorer({
   token,
   gardens,
+  signedIn,
   copy,
 }: {
   token: string;
   gardens: (NearbyGarden & { miles: number })[];
+  signedIn: boolean;
   copy: {
     youAreHere: string;
     startingPoint: string;
@@ -36,15 +39,40 @@ export function MapExplorer({
     mapLabel: string;
     favorite: string;
     visited: string;
+    onPlatform: string;
+    listedOnly: string;
+    legendOn: string;
+    legendOff: string;
+    directions: string;
+    walkHint: string;
+    away: string;
+    here: string;
+    needLocation: string;
+    arrivedTitle: string;
+    opened: string;
+    yes: string;
+    no: string;
+    report: string;
+    reportHint: string;
+    save: string;
+    saved: string;
+    loginToSave: string;
+    signupToSave: string;
+    close: string;
+    choose: string;
+    listedPin: string;
   };
 }) {
   const [selectedId, setSelectedId] = useState("");
   const [live, setLive] = useState<LiveFix | null>(null);
   const [status, setStatus] = useState<"idle" | "waiting" | "live" | "denied" | "unavailable" | "unsupported">("idle");
   const [focusLive, setFocusLive] = useState(0);
+  const [surveyFor, setSurveyFor] = useState("");
   const watchId = useRef<number | null>(null);
   const centered = useRef(false);
+  const dismissed = useRef(new Set<string>());
   const router = useRouter();
+  const selected = gardens.find((garden) => garden.id === selectedId) ?? null;
 
   useEffect(() => {
     shareLocation();
@@ -57,6 +85,13 @@ export function MapExplorer({
     // Start once. shareLocation no-ops if a watch is already running.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!selected || selected.slug || !live) return;
+    const miles = milesBetween(live.lat, live.lng, selected.lat, selected.lng);
+    if (miles > ARRIVAL_MILES * 2) dismissed.current.delete(selected.id);
+    if (miles <= ARRIVAL_MILES && !dismissed.current.has(selected.id)) setSurveyFor(selected.id);
+  }, [live, selected]);
 
   function shareLocation() {
     if (!navigator.geolocation) {
@@ -86,6 +121,16 @@ export function MapExplorer({
 
   return (
     <div className="grid gap-4 lg:grid-cols-[20rem_1fr] lg:items-start">
+      <div className="order-first flex flex-wrap gap-3 text-sm lg:col-span-2">
+        <span className="inline-flex items-center gap-2 rounded-full bg-card px-3 py-1 font-semibold">
+          <span aria-hidden="true" className="map-pin map-pin-onboarded" />
+          {copy.legendOn}
+        </span>
+        <span className="inline-flex items-center gap-2 rounded-full bg-card px-3 py-1 font-semibold">
+          <span aria-hidden="true" className="map-pin map-pin-listed" />
+          {copy.legendOff}
+        </span>
+      </div>
       <section className="order-2 rounded-3xl border border-line bg-card p-4 lg:order-1 lg:max-h-[72vh] lg:overflow-auto" aria-label={copy.listLabel}>
         <h2 className="text-lg font-semibold">{copy.youAreHere}</h2>
         {status === "live" ? <p className="mt-1 text-sm text-muted">{copy.liveOn}</p> : null}
@@ -120,6 +165,9 @@ export function MapExplorer({
                     {garden.name}
                     {garden.visited ? ` · ${copy.visited}` : ""}
                   </span>
+                  <span className={`mt-1 inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${garden.slug ? "bg-[#215c45] text-[#f7f3ea]" : "bg-[#c4a574] text-[#3d2914]"}`}>
+                    {garden.slug ? copy.onPlatform : copy.listedOnly}
+                  </span>
                   <span className="mt-1 block text-sm text-muted">
                     {garden.neighborhood} · {garden.miles.toFixed(1)} {copy.miles}
                     {fromYou !== null ? ` · ${fromYou.toFixed(1)} ${copy.miles} ${copy.fromYou}` : ""}
@@ -138,7 +186,7 @@ export function MapExplorer({
           })}
         </ul>
       </section>
-      <section className="order-1 h-[58vh] min-h-[300px] w-full overflow-hidden rounded-3xl border border-line bg-card lg:order-2 lg:h-[72vh]" aria-label={copy.mapLabel}>
+      <section className="relative order-1 h-[58vh] min-h-[300px] w-full overflow-hidden rounded-3xl border border-line bg-card lg:order-2 lg:h-[72vh]" aria-label={copy.mapLabel}>
         <GardenMap
           token={token}
           gardens={gardens}
@@ -150,7 +198,26 @@ export function MapExplorer({
           focusLive={focusLive}
           missingToken={copy.missingToken}
           openPin={copy.openPin}
+          listedPin={copy.listedPin}
         />
+        {selected && !selected.slug ? (
+          <div className="pointer-events-none absolute inset-x-3 bottom-3 z-10 max-h-[75%] overflow-auto">
+            <div className="pointer-events-auto">
+              <GardenVisitCard
+                garden={selected}
+                live={live}
+                signedIn={signedIn}
+                copy={copy}
+                surveyOpen={surveyFor === selected.id}
+                onClose={() => setSelectedId("")}
+                onSurveyClose={() => {
+                  dismissed.current.add(selected.id);
+                  setSurveyFor("");
+                }}
+              />
+            </div>
+          </div>
+        ) : null}
       </section>
     </div>
   );

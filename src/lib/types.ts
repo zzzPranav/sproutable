@@ -318,6 +318,16 @@ export interface ChatBan {
   active: boolean;
 }
 
+/** A check-in at a community garden that is on the map but not yet a Sproutable page. */
+export interface PlaceReport {
+  report_id: string;
+  place_id: string;
+  user_id: string;
+  opened: boolean;
+  note: string;
+  created_at: string;
+}
+
 export interface Database {
   users: User[];
   gardens: Garden[];
@@ -346,6 +356,7 @@ export interface Database {
   chatMessages: ChatMessage[];
   chatBans: ChatBan[];
   emails: MockEmail[];
+  placeReports: PlaceReport[];
 }
 
 export function emptyDatabase(): Database {
@@ -377,5 +388,6 @@ export function emptyDatabase(): Database {
     chatMessages: [],
     chatBans: [],
     emails: [],
+    placeReports: [],
   };
 }

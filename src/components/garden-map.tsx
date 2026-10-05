@@ -17,6 +17,7 @@ export function GardenMap({
   focusLive,
   missingToken,
   openPin,
+  listedPin,
 }: {
   token: string;
   gardens: NearbyGarden[];
@@ -28,6 +29,7 @@ export function GardenMap({
   focusLive: number;
   missingToken: string;
   openPin: string;
+  listedPin: string;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -63,9 +65,9 @@ export function GardenMap({
       bounds.extend([garden.lng, garden.lat]);
       const pin = document.createElement("button");
       pin.type = "button";
-      pin.className = `map-pin map-pin-garden${garden.favorite ? " map-pin-favorite" : ""}`;
+      pin.className = `map-pin map-pin-garden ${garden.slug ? "map-pin-onboarded" : "map-pin-listed"}${garden.favorite ? " map-pin-favorite" : ""}`;
       pin.dataset.gardenId = garden.id;
-      pin.setAttribute("aria-label", garden.slug ? `${garden.name}. ${openPin}` : garden.name);
+      pin.setAttribute("aria-label", garden.slug ? `${garden.name}. ${openPin}` : `${garden.name}. ${listedPin}`);
       pin.title = garden.name;
       const openGarden = () => {
         onSelectRef.current(garden.id);
@@ -93,7 +95,7 @@ export function GardenMap({
       liveMarker.current = null;
       setMapReady(false);
     };
-  }, [gardens, openPin, token, youAreHere]);
+  }, [gardens, listedPin, openPin, token, youAreHere]);
 
   useEffect(() => {
     const map = mapRef.current;

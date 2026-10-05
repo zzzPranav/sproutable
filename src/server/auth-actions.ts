@@ -112,7 +112,11 @@ export async function signup(_prev: ActionState, formData: FormData): Promise<Ac
 
   await setSession(userId);
   await rememberLanguage(language);
-  redirect("/welcome");
+  const jar = await cookies();
+  jar.set("sproutable_seen_welcome", "1", { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
+  const next = safeNext(formData.get("next"));
+  if (next) redirect(next);
+  redirect(accountType === "manager" ? "/dashboard?welcome=1" : "/start");
 }
 
 export async function login(_prev: ActionState, formData: FormData): Promise<ActionState> {

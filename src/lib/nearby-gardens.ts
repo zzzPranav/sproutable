@@ -290,6 +290,9 @@ export const NEARBY_GARDENS: NearbyGarden[] = [
   },
 ];
 
+/** Close enough to the gate to answer the arrival check-in. About 370 feet. */
+export const ARRIVAL_MILES = 0.07;
+
 export function milesBetween(lat1: number, lng1: number, lat2: number, lng2: number) {
   const toRad = (value: number) => (value * Math.PI) / 180;
   const dLat = toRad(lat2 - lat1);

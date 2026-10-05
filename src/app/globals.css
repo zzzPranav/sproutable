@@ -25,7 +25,7 @@
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-sun: var(--sun);
-  --font-sans: var(--font-source), "Source Sans 3", sans-serif;
+  --font-sans: var(--font-pixel), "Pixelify Sans", ui-sans-serif, sans-serif;
   --font-game: var(--font-pixel), "Pixelify Sans", ui-sans-serif, sans-serif;
 }
 
@@ -41,7 +41,10 @@ body {
   background-size: 240px 240px, auto, auto, auto, auto, auto;
   background-attachment: fixed;
   color: var(--foreground);
+  font-family: var(--font-sans);
   font-size: 1.0625rem;
+  line-height: 1.45;
+  -webkit-font-smoothing: auto;
 }
 
 a {
@@ -55,6 +58,7 @@ a {
 
 .map-pin {
   position: relative;
+  display: inline-block;
   width: 1.15rem;
   height: 1.15rem;
   border: 2px solid #fffdf8;
@@ -88,16 +92,49 @@ a {
   background: #215c45;
 }
 
+.map-pin-onboarded {
+  width: 1.65rem;
+  height: 1.65rem;
+  background: #215c45;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  box-shadow: 2px 2px 0 #3d2914;
+}
+
+.map-pin-onboarded::before {
+  content: "";
+  position: absolute;
+  top: 0.32rem;
+  left: 0.32rem;
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 999px;
+  background: #e7f4ea;
+  transform: rotate(45deg);
+}
+
+.map-pin-listed {
+  width: 1.05rem;
+  height: 1.05rem;
+  background: #fffdf8;
+  border: 3px solid #8a5a32;
+  border-radius: 2px;
+  transform: rotate(45deg);
+  box-shadow: none;
+}
+
 .map-pin-favorite {
   background: #e3b23c;
-  box-shadow: 0 0 0 3px #215c45;
+  box-shadow: 2px 2px 0 #3d2914;
+}
+
+.map-pin-favorite::before {
+  background: #3d2914;
 }
 
 .map-pin-selected {
-  width: 1.5rem;
-  height: 1.5rem;
-  background: #e3b23c;
-  outline: 3px solid #215c45;
+  outline: 3px solid #e3b23c;
+  outline-offset: 3px;
 }
 
 .prose-garden a {

@@ -214,6 +214,7 @@ const db: Database = {
       active: true,
     },
   ],
+  placeReports: [],
 };
 
 db.homeModules = [

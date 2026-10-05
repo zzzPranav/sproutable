@@ -33,6 +33,7 @@ async function readFileDb(): Promise<Database> {
     if (!data.volunteerOffers) data.volunteerOffers = [];
     if (!data.communityPosts) data.communityPosts = [];
     if (!data.produceShares) data.produceShares = [];
+    if (!data.placeReports) data.placeReports = [];
     return data;
   } catch (error) {
     const code = (error as NodeJS.ErrnoException).code;

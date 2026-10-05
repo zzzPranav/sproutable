@@ -45,6 +45,7 @@ export default async function MapPage() {
         <MapExplorer
           token={process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? ""}
           gardens={gardens}
+          signedIn={Boolean(user)}
           copy={{
             youAreHere: t("youAreHere"),
             startingPoint: t("startingPoint"),
@@ -66,6 +67,28 @@ export default async function MapPage() {
             mapLabel: t("mapLabel"),
             favorite: t("favorite"),
             visited: t("visited"),
+            onPlatform: t("onPlatform"),
+            listedOnly: t("listedOnly"),
+            legendOn: t("legendOn"),
+            legendOff: t("legendOff"),
+            directions: t("directions"),
+            walkHint: t("walkHint"),
+            away: t("away"),
+            here: t("here"),
+            needLocation: t("needLocation"),
+            arrivedTitle: t("arrivedTitle"),
+            opened: t("opened"),
+            yes: t("yes"),
+            no: t("no"),
+            report: t("report"),
+            reportHint: t("reportHint"),
+            save: t("save"),
+            saved: t("saved"),
+            loginToSave: t("loginToSave"),
+            signupToSave: t("signupToSave"),
+            close: t("close"),
+            choose: t("choose"),
+            listedPin: t("listedPin"),
           }}
         />
       </div>
