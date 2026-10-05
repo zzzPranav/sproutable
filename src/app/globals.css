@@ -44,6 +44,7 @@ body {
   font-family: var(--font-sans);
   font-size: 1.0625rem;
   line-height: 1.45;
+  overflow-wrap: break-word;
   -webkit-font-smoothing: auto;
 }
 
@@ -71,6 +72,12 @@ a {
   content: "";
   position: absolute;
   inset: -14px;
+}
+
+@media (pointer: coarse) {
+  .map-pin-garden::after {
+    inset: -20px;
+  }
 }
 
 .map-pin-you {

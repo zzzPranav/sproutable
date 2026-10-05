@@ -39,7 +39,7 @@ export default async function MapPage() {
           {t("home")}
         </Link>
       </p>
-      <h1 className="mt-2 font-game text-4xl">{t("title")}</h1>
+      <h1 className="mt-2 font-game text-3xl sm:text-4xl">{t("title")}</h1>
       <p className="mt-3 max-w-2xl text-lg text-muted">{t("body")}</p>
       <div className="mt-6 overflow-hidden rounded-[1.25rem] border-4 border-[#3d2914] shadow-[6px_6px_0_#3d2914]">
         <MapExplorer

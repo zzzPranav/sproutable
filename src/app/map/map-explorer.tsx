@@ -122,12 +122,16 @@ export function MapExplorer({
   return (
     <div className="grid gap-4 lg:grid-cols-[20rem_1fr] lg:items-start">
       <div className="order-first flex flex-wrap gap-3 text-sm lg:col-span-2">
-        <span className="inline-flex items-center gap-2 rounded-full bg-card px-3 py-1 font-semibold">
-          <span aria-hidden="true" className="map-pin map-pin-onboarded" />
+        <span className="inline-flex min-h-11 items-center gap-2 rounded-full bg-card px-3 py-1 text-sm font-semibold">
+          <span aria-hidden="true" className="inline-flex h-7 w-7 items-center justify-center">
+            <span className="map-pin map-pin-onboarded" />
+          </span>
           {copy.legendOn}
         </span>
-        <span className="inline-flex items-center gap-2 rounded-full bg-card px-3 py-1 font-semibold">
-          <span aria-hidden="true" className="map-pin map-pin-listed" />
+        <span className="inline-flex min-h-11 items-center gap-2 rounded-full bg-card px-3 py-1 text-sm font-semibold">
+          <span aria-hidden="true" className="inline-flex h-7 w-7 items-center justify-center">
+            <span className="map-pin map-pin-listed" />
+          </span>
           {copy.legendOff}
         </span>
       </div>
@@ -201,7 +205,7 @@ export function MapExplorer({
           listedPin={copy.listedPin}
         />
         {selected && !selected.slug ? (
-          <div className="pointer-events-none absolute inset-x-3 bottom-3 z-10 max-h-[75%] overflow-auto">
+          <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 max-h-[70dvh] overflow-auto px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:absolute lg:inset-x-3 lg:bottom-3 lg:z-10 lg:max-h-[75%] lg:px-0 lg:pb-0">
             <div className="pointer-events-auto">
               <GardenVisitCard
                 garden={selected}

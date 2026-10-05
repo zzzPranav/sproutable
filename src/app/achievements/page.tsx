@@ -29,7 +29,7 @@ export default async function AchievementsPage() {
   return (
     <section className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
       <Link href="/" className="font-semibold text-primary underline">{t("home")}</Link>
-      <h1 className="mt-4 font-game text-4xl tracking-tight sm:text-6xl">{t("title")}</h1>
+      <h1 className="mt-4 font-game text-3xl tracking-tight sm:text-6xl">{t("title")}</h1>
       <p className="mt-4 max-w-2xl text-xl text-muted">{t("body")}</p>
       <div className="mt-6 overflow-hidden rounded-3xl border-4 border-[#3d2914] bg-card shadow-[5px_5px_0_#3d2914]">
         <div className="p-5">

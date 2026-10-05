@@ -10,7 +10,7 @@ export function Field({ label, children, hint }: { label: string; children: Reac
   );
 }
 
-const control = "w-full rounded-xl border border-line bg-white px-3 py-2 text-base";
+const control = "w-full min-h-11 rounded-xl border border-line bg-white px-3 py-2 text-base";
 
 export function TextInput(props: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={control} {...props} />;

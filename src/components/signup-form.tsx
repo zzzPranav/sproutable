@@ -24,7 +24,7 @@ export function SignupForm({ initialType, next, language }: { initialType?: stri
     <div className="mx-auto max-w-lg px-4 py-8">
       <div className="game-panel bg-[#fffdf8] p-6 sm:p-8">
         <p className="font-game text-4xl text-[#215c45]">Sproutable</p>
-        <h1 className="mt-2 font-game text-3xl text-[#3d2914]">{t("auth.signupTitle")}</h1>
+        <h1 className="mt-2 font-game text-2xl text-[#3d2914] sm:text-3xl">{t("auth.signupTitle")}</h1>
         <p className="mt-2 text-lg text-muted">{t("auth.quickLead")}</p>
         <form action={action} className="mt-6 space-y-4">
           <input type="hidden" name="account_type" value={manager ? "manager" : "user"} />

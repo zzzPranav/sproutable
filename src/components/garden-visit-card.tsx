@@ -46,11 +46,11 @@ export function GardenVisitCard({
 
   return (
     <>
-      <article className="rounded-2xl border-4 border-[#3d2914] bg-[#fffdf8] p-4 shadow-[4px_4px_0_#3d2914]">
+      <article className="rounded-2xl border-4 border-[#3d2914] bg-[#fffdf8] p-3 shadow-[4px_4px_0_#3d2914] sm:p-4">
         <div className="flex items-start justify-between gap-3">
-          <div>
+          <div className="min-w-0">
             <p className="text-sm font-semibold text-[#8a5a32]">{copy.listedOnly}</p>
-            <h3 className="font-game text-2xl leading-tight text-[#3d2914]">{garden.name}</h3>
+            <h3 className="font-game text-xl leading-tight text-[#3d2914] sm:text-2xl">{garden.name}</h3>
           </div>
           <button type="button" onClick={onClose} className="min-h-11 shrink-0 px-2 font-semibold text-primary">
             {copy.close}
@@ -63,10 +63,10 @@ export function GardenVisitCard({
         ) : (
           <p className="mt-2 text-sm text-muted">{copy.needLocation}</p>
         )}
-        <p className="mt-2 text-sm">{copy.walkHint}</p>
-        <a href={directions} target="_blank" rel="noopener noreferrer" className="game-btn mt-3 inline-flex min-h-11 items-center bg-[#215c45] px-4 font-semibold text-[#f7f3ea]">
+        <a href={directions} target="_blank" rel="noopener noreferrer" className="game-btn mt-3 inline-flex min-h-11 w-full items-center justify-center bg-[#215c45] px-4 font-semibold text-[#f7f3ea] sm:w-auto">
           {copy.directions}
         </a>
+        <p className="mt-2 text-sm">{copy.walkHint}</p>
       </article>
       {surveyOpen ? (
         <ArrivalSurvey gardenId={garden.id} gardenName={garden.name} signedIn={signedIn} copy={copy} onClose={onSurveyClose} />
@@ -124,8 +124,8 @@ function ArrivalSurvey({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#1c1917]/40 p-4 sm:items-center" role="presentation">
-      <form role="dialog" aria-modal="true" aria-labelledby="arrival-title" onSubmit={onSubmit} className="w-full max-w-md rounded-3xl border-4 border-[#3d2914] bg-[#fffdf8] p-5 shadow-[6px_6px_0_#3d2914]">
+    <div className="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto overscroll-contain bg-[#1c1917]/40 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:items-center sm:p-4" role="presentation">
+      <form role="dialog" aria-modal="true" aria-labelledby="arrival-title" onSubmit={onSubmit} className="max-h-[calc(100dvh-1.5rem)] w-full max-w-md overflow-y-auto rounded-3xl border-4 border-[#3d2914] bg-[#fffdf8] p-4 shadow-[6px_6px_0_#3d2914] sm:p-5">
         <h3 id="arrival-title" className="font-game text-3xl text-[#3d2914]">{copy.arrivedTitle}</h3>
         <p className="mt-1 font-semibold">{gardenName}</p>
         {saved ? (

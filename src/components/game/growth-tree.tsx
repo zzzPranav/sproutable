@@ -24,7 +24,7 @@ export function GrowthTree({
 
   return (
     <figure className="overflow-hidden">
-      <div className="garden-sky px-4 pb-2 pt-6 sm:px-8">
+      <div className="garden-sky px-2 pb-2 pt-4 sm:px-8 sm:pt-6">
         <div className="relative mx-auto max-w-lg">
           <div aria-hidden="true" className="absolute bottom-6 left-[0.35rem] top-6 w-1">
             <div className="absolute inset-0 rounded-full bg-[#c4a574]" />
@@ -34,7 +34,7 @@ export function GrowthTree({
           {stages.map((stage) => {
             const state = stage.rank === rank ? "now" : stage.rank < rank ? "done" : "ahead";
             return (
-              <li key={stage.id} className={`relative flex items-center gap-4 rounded-2xl px-3 py-2 ${state === "now" ? "bg-[#fffdf8] shadow-[3px_3px_0_#3d2914]" : ""}`}>
+              <li key={stage.id} className={`relative flex items-center gap-2 rounded-2xl px-2 py-2 sm:gap-4 sm:px-3 ${state === "now" ? "bg-[#fffdf8] shadow-[3px_3px_0_#3d2914]" : ""}`}>
                 <span
                   aria-hidden="true"
                   className={`absolute -left-8 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-4 ${
@@ -43,7 +43,7 @@ export function GrowthTree({
                 />
                 <StageArt id={stage.id} state={state} />
                 <div className="min-w-0">
-                  <p className={`font-game text-2xl leading-none sm:text-3xl ${state === "ahead" ? "text-[#5c564e]" : "text-[#3d2914]"}`}>
+                  <p className={`font-game text-xl leading-tight sm:text-3xl ${state === "ahead" ? "text-[#5c564e]" : "text-[#3d2914]"}`}>
                     {labels[stage.id]}
                   </p>
                   {state === "now" ? (
@@ -66,7 +66,7 @@ export function GrowthTree({
 }
 
 function StageArt({ id, state }: { id: StageId; state: "done" | "now" | "ahead" }) {
-  const size = id === "tree" || id === "youngTree" ? "h-20 w-20" : id === "sapling" ? "h-16 w-16" : "h-14 w-14";
+  const size = id === "tree" || id === "youngTree" ? "h-14 w-14 sm:h-20 sm:w-20" : id === "sapling" ? "h-12 w-12 sm:h-16 sm:w-16" : "h-11 w-11 sm:h-14 sm:w-14";
   const sway = state === "now" ? "plant-sway" : "";
   const fade = state === "ahead" ? "opacity-45" : "";
   return (
