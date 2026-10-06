@@ -45,7 +45,6 @@ export function MapExplorer({
     legendOff: string;
     directions: string;
     walkHint: string;
-    away: string;
     here: string;
     needLocation: string;
     arrivedTitle: string;

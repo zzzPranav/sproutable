@@ -23,12 +23,26 @@ function safeNext(value: FormDataEntryValue | null) {
   return next;
 }
 
+function isRedirect(error: unknown) {
+  return typeof error === "object" && error !== null && "digest" in error && String((error as { digest?: string }).digest).startsWith("NEXT_REDIRECT");
+}
+
 async function rememberLanguage(language: Language) {
   const jar = await cookies();
   jar.set("locale", language, { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
 }
 
 export async function signup(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  try {
+    return await signupAccount(formData);
+  } catch (error) {
+    if (isRedirect(error)) throw error;
+    console.error(error);
+    return { error: "generic" };
+  }
+}
+
+async function signupAccount(formData: FormData): Promise<ActionState> {
   const accountType = formData.get("account_type") === "manager" ? "manager" : "user";
   const name = String(formData.get("name") ?? "").trim();
   const emailResult = emailSchema.safeParse(formData.get("email"));
@@ -120,18 +134,25 @@ export async function signup(_prev: ActionState, formData: FormData): Promise<Ac
 }
 
 export async function login(_prev: ActionState, formData: FormData): Promise<ActionState> {
-  const emailResult = emailSchema.safeParse(formData.get("email"));
-  const password = String(formData.get("password") ?? "");
-  if (!emailResult.success || !password) return { error: "invalid_login" };
-  const { readDb } = await import("@/lib/data/store");
-  const db = await readDb();
-  const user = userByEmail(db, emailResult.data);
-  if (!user || !(await verifyPassword(password, user.password_hash))) return { error: "invalid_login" };
-  await setSession(user.user_id);
-  await rememberLanguage(user.language);
-  const next = safeNext(formData.get("next"));
-  const seen = (await cookies()).get("sproutable_seen_welcome")?.value === "1";
-  redirect(next || (seen ? "/" : "/welcome"));
+  try {
+    const emailResult = emailSchema.safeParse(formData.get("email"));
+    const password = String(formData.get("password") ?? "");
+    if (!emailResult.success || !password) return { error: "invalid_login" };
+    const { readDb } = await import("@/lib/data/store");
+    const db = await readDb();
+    const user = userByEmail(db, emailResult.data);
+    if (!user || !(await verifyPassword(password, user.password_hash))) return { error: "invalid_login" };
+    await setSession(user.user_id);
+    await rememberLanguage(user.language);
+    const next = safeNext(formData.get("next"));
+    const seen = (await cookies()).get("sproutable_seen_welcome")?.value === "1";
+    const fresh = !db.visits.some((visit) => visit.user_id === user.user_id) && !db.memberships.some((item) => item.user_id === user.user_id);
+    redirect(next || (fresh ? "/start" : seen ? "/" : "/welcome"));
+  } catch (error) {
+    if (isRedirect(error)) throw error;
+    console.error(error);
+    return { error: "generic" };
+  }
 }
 
 export async function finishWelcome() {

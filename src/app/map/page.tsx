@@ -73,7 +73,6 @@ export default async function MapPage() {
             legendOff: t("legendOff"),
             directions: t("directions"),
             walkHint: t("walkHint"),
-            away: t("away"),
             here: t("here"),
             needLocation: t("needLocation"),
             arrivedTitle: t("arrivedTitle"),

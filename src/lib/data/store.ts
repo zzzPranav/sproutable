@@ -18,23 +18,18 @@ function enqueue<T>(task: () => Promise<T>): Promise<T> {
   return run;
 }
 
+function normalize(data: Database): Database {
+  const empty = emptyDatabase();
+  for (const key of Object.keys(empty) as (keyof Database)[]) {
+    if (!Array.isArray(data[key])) data[key] = empty[key] as never;
+  }
+  return data;
+}
+
 async function readFileDb(): Promise<Database> {
   try {
     const raw = await fs.readFile(DB_PATH, "utf8");
-    const data = JSON.parse(raw) as Database;
-    if (!data.emails) data.emails = [];
-    if (!data.itemDonations) data.itemDonations = [];
-    if (!data.moneyDonations) data.moneyDonations = [];
-    if (!data.gardenTies) data.gardenTies = [];
-    if (!data.buddyLinks) data.buddyLinks = [];
-    if (!data.buddyNotes) data.buddyNotes = [];
-    if (!data.awardedBadges) data.awardedBadges = [];
-    if (!data.savedEvents) data.savedEvents = [];
-    if (!data.volunteerOffers) data.volunteerOffers = [];
-    if (!data.communityPosts) data.communityPosts = [];
-    if (!data.produceShares) data.produceShares = [];
-    if (!data.placeReports) data.placeReports = [];
-    return data;
+    return normalize(JSON.parse(raw) as Database);
   } catch (error) {
     const code = (error as NodeJS.ErrnoException).code;
     if (code === "ENOENT") return emptyDatabase();

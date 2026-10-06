@@ -116,7 +116,7 @@
     "legendOff": "Solo en el mapa",
     "directions": "Indicaciones a pie",
     "walkHint": "Camina hasta allí. Al llegar, una breve visita pregunta si pudiste abrir el jardín.",
-    "away": "A '{'miles'}' mi",
+    "away": "A {miles} mi",
     "here": "Estás en el jardín",
     "needLocation": "Comparte tu ubicación para que la visita se abra cuando llegues.",
     "arrivedTitle": "Llegaste",
@@ -578,6 +578,7 @@
     "cancel": "Cancelar",
     "loading": "Cargando",
     "retry": "Intentar de nuevo",
+    "home": "Volver al inicio",
     "dataError": "Los datos del jardín no están disponibles ahora."
   },
   "growing": {

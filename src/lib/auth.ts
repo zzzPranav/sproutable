@@ -15,8 +15,13 @@ export function hashPassword(password: string) {
   return bcrypt.hash(password, 10);
 }
 
-export function verifyPassword(password: string, hash: string) {
-  return bcrypt.compare(password, hash);
+export async function verifyPassword(password: string, hash: string) {
+  if (!hash?.startsWith("$2")) return false;
+  try {
+    return await bcrypt.compare(password, hash);
+  } catch {
+    return false;
+  }
 }
 
 export async function setSession(userId: string) {

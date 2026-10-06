@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ARRIVAL_MILES, milesBetween, type NearbyGarden } from "@/lib/nearby-gardens";
 import { reportPlaceVisit } from "@/server/place-actions";
 
@@ -21,7 +22,6 @@ export function GardenVisitCard({
     listedOnly: string;
     directions: string;
     walkHint: string;
-    away: string;
     here: string;
     needLocation: string;
     arrivedTitle: string;
@@ -41,6 +41,7 @@ export function GardenVisitCard({
   surveyOpen: boolean;
   onSurveyClose: () => void;
 }) {
+  const map = useTranslations("map");
   const miles = live ? milesBetween(live.lat, live.lng, garden.lat, garden.lng) : null;
   const directions = `https://www.google.com/maps/dir/?api=1&destination=${garden.lat},${garden.lng}&travelmode=walking`;
 
@@ -59,7 +60,7 @@ export function GardenVisitCard({
         <p className="mt-1 text-sm">{garden.address}</p>
         <p className="text-sm text-muted">{garden.neighborhood}</p>
         {miles !== null ? (
-          <p className="mt-2 font-semibold text-primary">{miles <= ARRIVAL_MILES ? copy.here : copy.away.replace("{miles}", miles.toFixed(2))}</p>
+          <p className="mt-2 font-semibold text-primary">{miles <= ARRIVAL_MILES ? copy.here : map("away", { miles: miles.toFixed(2) })}</p>
         ) : (
           <p className="mt-2 text-sm text-muted">{copy.needLocation}</p>
         )}
