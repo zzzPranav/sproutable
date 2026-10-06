@@ -119,8 +119,8 @@ export function MapExplorer({
   }
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[20rem_1fr] lg:items-start">
-      <div className="order-first flex flex-wrap gap-3 text-sm lg:col-span-2">
+    <div className="grid gap-4 p-3 sm:p-4 lg:grid-cols-[20rem_1fr] lg:items-start">
+      <div className="order-first flex flex-wrap gap-3 px-1 py-1 text-sm lg:col-span-2">
         <span className="inline-flex min-h-11 items-center gap-2 rounded-full bg-card px-3 py-1 text-sm font-semibold">
           <span aria-hidden="true" className="inline-flex h-7 w-7 items-center justify-center">
             <span className="map-pin map-pin-onboarded" />

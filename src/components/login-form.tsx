@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { login } from "@/server/auth-actions";
 import { Button } from "@/components/button";
-import { DemoCredentials } from "@/components/demo-credentials";
 import { Field, TextInput } from "@/components/field";
 
 export function LoginForm({ next }: { next?: string }) {
@@ -30,7 +29,6 @@ export function LoginForm({ next }: { next?: string }) {
       <p className="mt-4">
         {t("auth.needAccount")} <Link href="/signup" className="font-semibold text-primary">{t("nav.signup")}</Link>
       </p>
-      <DemoCredentials />
     </div>
   );
 }

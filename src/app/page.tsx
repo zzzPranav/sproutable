@@ -14,6 +14,14 @@ export default async function HomePage() {
       enterLabel={t("enter")}
       tourHref="/welcome"
       tourLabel={t("tour")}
+      talkLabel={t("talk")}
+      closeLabel={t("close")}
+      loginHello={t("loginHello")}
+      loginHref="/login?next=/"
+      neighbors={[
+        { id: "ana", name: "Ana", shirt: "#3d6f8f", x: 34, y: 64, line: t("anaLine"), action: t("anaAction"), href: "/community" },
+        { id: "luis", name: "Luis", shirt: "#8f3b1c", x: 58, y: 26, line: t("luisLine"), action: t("luisAction"), href: "/growing" },
+      ]}
       places={[
         { id: "map", href: "/map", label: t("map"), hint: t("mapHint"), x: 46, y: 18 },
         { id: "community", href: "/community", label: t("community"), hint: t("communityHint"), x: 24, y: 34 },

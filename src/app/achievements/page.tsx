@@ -39,6 +39,7 @@ export default async function AchievementsPage() {
         <GrowthTree
             level={stats?.level ?? 1}
             you={stats ? t("you") : t("guestMark")}
+            youHref={stats ? undefined : "/login?next=/achievements"}
             start={t("start")}
             labels={{
               tree: t("stages.tree"),

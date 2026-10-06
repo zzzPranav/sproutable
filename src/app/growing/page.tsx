@@ -216,23 +216,29 @@ export default async function GrowingPage({
           <article className="rounded-3xl border border-line bg-card p-5 shadow-sm">
             <p className="text-sm font-semibold tracking-wide text-muted">{t("moneyMark")}</p>
             <h3 className="mt-1 text-2xl font-semibold">{t("money")}</h3>
-            <p className="mt-3 text-4xl font-semibold">{formatDollars(pledged, locale)}</p>
-            <p className="text-muted">{t("ofGoal", { goal: formatDollars(SEASON_FUND_GOAL_CENTS, locale) })}</p>
-            <div className="mt-4 h-3 overflow-hidden rounded-full bg-background" role="progressbar" aria-valuenow={pledged} aria-valuemin={0} aria-valuemax={SEASON_FUND_GOAL_CENTS} aria-label={t("goalLabel")}>
-              <div className="h-full rounded-full bg-primary" style={{ width: `${percent}%` }} />
-            </div>
+            {manager ? (
+              <>
+                <p className="mt-3 text-4xl font-semibold">{formatDollars(pledged, locale)}</p>
+                <p className="text-muted">{t("ofGoal", { goal: formatDollars(SEASON_FUND_GOAL_CENTS, locale) })}</p>
+                <div className="mt-4 h-3 overflow-hidden rounded-full bg-background" role="progressbar" aria-valuenow={pledged} aria-valuemin={0} aria-valuemax={SEASON_FUND_GOAL_CENTS} aria-label={t("goalLabel")}>
+                  <div className="h-full rounded-full bg-primary" style={{ width: `${percent}%` }} />
+                </div>
+                <h4 className="mt-5 font-semibold">{t("recent")}</h4>
+                {pledges.length === 0 ? <p className="mt-2 text-muted">{t("noPledges")}</p> : null}
+                <ul className="mt-2 space-y-2">
+                  {pledges.slice(0, 6).map((pledge) => (
+                    <li key={pledge.donation_id}>
+                      <span className="font-semibold">{pledge.name.split(" ")[0]}</span>
+                      <span className="text-muted"> · {formatDollars(pledge.amount_cents, locale)}</span>
+                      {pledge.note ? <span className="mt-0.5 block text-sm text-muted">{pledge.note}</span> : null}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p className="mt-3 text-muted">{t("moneyPrivate")}</p>
+            )}
             <p className="mt-3 text-sm text-muted">{t("goalHint")}</p>
-            <h4 className="mt-5 font-semibold">{t("recent")}</h4>
-            {pledges.length === 0 ? <p className="mt-2 text-muted">{t("noPledges")}</p> : null}
-            <ul className="mt-2 space-y-2">
-              {pledges.slice(0, 6).map((pledge) => (
-                <li key={pledge.donation_id}>
-                  <span className="font-semibold">{pledge.name.split(" ")[0]}</span>
-                  <span className="text-muted"> · {formatDollars(pledge.amount_cents, locale)}</span>
-                  {pledge.note ? <span className="mt-0.5 block text-sm text-muted">{pledge.note}</span> : null}
-                </li>
-              ))}
-            </ul>
             {user ? (
               <form action={pledgeMoney} className="mt-5 space-y-3">
                 <Field label={t("dollars")}>

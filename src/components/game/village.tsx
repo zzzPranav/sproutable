@@ -14,6 +14,17 @@ export type VillagePlace = {
   y: number;
 };
 
+export type VillageNeighbor = {
+  id: string;
+  name: string;
+  shirt: string;
+  x: number;
+  y: number;
+  line: string;
+  action: string;
+  href: string;
+};
+
 const shirts = ["#215c45", "#8f3b1c", "#3d6f8f", "#6b3f22", "#7a4e8a"];
 
 function shirtFor(name: string) {
@@ -34,15 +45,25 @@ export function Village({
   enterLabel,
   tourHref,
   tourLabel,
+  neighbors,
+  talkLabel,
+  closeLabel,
+  loginHello,
+  loginHref,
 }: {
   name: string;
   guest: boolean;
   places: VillagePlace[];
+  neighbors: VillageNeighbor[];
   caption: string;
   moveHint: string;
   enterLabel: string;
   tourHref: string;
   tourLabel: string;
+  talkLabel: string;
+  closeLabel: string;
+  loginHello: string;
+  loginHref: string;
 }) {
   const router = useRouter();
   const scene = useRef<HTMLDivElement>(null);
@@ -52,6 +73,8 @@ export function Village({
   const nearRef = useRef<string | null>(null);
   const [at, setAt] = useState({ x: 48, y: 58 });
   const [near, setNear] = useState<string | null>(null);
+  const [pinned, setPinned] = useState<string | null>(null);
+  const personId = pinned && pinned !== "off" ? pinned : pinned === "off" ? null : near?.startsWith("person:") ? near.slice("person:".length) : null;
 
   useEffect(() => {
     const down = (event: KeyboardEvent) => {
@@ -62,8 +85,15 @@ export function Village({
       if (key === "arrowleft" || key === "a") held.current.x = -1;
       if (key === "arrowright" || key === "d") held.current.x = 1;
       if (key === "enter" && nearRef.current) {
-        const place = places.find((item) => item.id === nearRef.current);
-        if (place) router.push(place.href);
+        const [kind, id] = nearRef.current.split(":");
+        if (kind === "place") {
+          const place = places.find((item) => item.id === id);
+          if (place) router.push(place.href);
+        }
+        if (kind === "person") {
+          const person = neighbors.find((item) => item.id === id);
+          if (person) router.push(person.href);
+        }
       }
     };
     const up = (event: KeyboardEvent) => {
@@ -100,10 +130,12 @@ export function Village({
         pos.current = { x, y };
         setAt({ x, y });
       }
-      const closest = places
-        .map((place) => ({ id: place.id, dist: Math.hypot(place.x - x, place.y - y) }))
-        .sort((a, b) => a.dist - b.dist)[0];
-      const nextNear = closest && closest.dist < 14 ? closest.id : null;
+      const spots = [
+        ...places.map((place) => ({ id: `place:${place.id}`, dist: Math.hypot(place.x - x, place.y - y) })),
+        ...neighbors.map((person) => ({ id: `person:${person.id}`, dist: Math.hypot(person.x - x, person.y - y) })),
+      ].sort((a, b) => a.dist - b.dist);
+      const closest = spots[0];
+      const nextNear = closest && closest.dist < 12 ? closest.id : null;
       if (nearRef.current !== nextNear) {
         nearRef.current = nextNear;
         setNear(nextNear);
@@ -116,7 +148,11 @@ export function Village({
       window.removeEventListener("keydown", down);
       window.removeEventListener("keyup", up);
     };
-  }, [places, router]);
+  }, [neighbors, places, router]);
+
+  useEffect(() => {
+    if (pinned === "off" && !near?.startsWith("person:")) setPinned(null);
+  }, [near, pinned]);
 
   function walkTo(event: React.PointerEvent<HTMLDivElement>) {
     if ((event.target as HTMLElement).closest("a,button")) return;
@@ -146,23 +182,69 @@ export function Village({
         <DecorTree className="absolute left-[4%] top-[18%] h-16 w-14" />
         <DecorTree className="absolute right-[3%] top-[48%] h-20 w-16" />
         <DecorTree className="absolute bottom-[6%] left-[8%] h-14 w-12" />
-        {places.map((place) => (
-          <a
-            key={place.id}
-            href={place.href}
-            aria-label={`${place.label}. ${place.hint}`}
-            className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
-            style={{ left: `${place.x}%`, top: `${place.y}%` }}
-          >
-            <PlaceMark id={place.id} hot={near === place.id} />
-            <span className={`-mt-1 border-2 border-[#6b3f22] bg-[#f4e7c5] px-2 font-game text-sm leading-tight text-[#3d2914] shadow-[2px_2px_0_#6b3f22] sm:text-base ${near === place.id ? "bg-[#e3b23c]" : ""}`}>
-              {place.label}
-            </span>
-            {near === place.id ? <span className="mt-1 bg-[#fffdf8]/90 px-1 text-xs font-semibold text-primary">{enterLabel}</span> : null}
-          </a>
-        ))}
-        <Neighbor className="absolute left-[34%] top-[64%] z-[5]" label="Ana" shirt="#3d6f8f" />
-        <Neighbor className="absolute left-[58%] top-[26%] z-[5]" label="Luis" shirt="#8f3b1c" />
+        {places.map((place) => {
+          const hot = near === `place:${place.id}`;
+          return (
+            <a
+              key={place.id}
+              href={place.href}
+              aria-label={`${place.label}. ${place.hint}`}
+              className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
+              style={{ left: `${place.x}%`, top: `${place.y}%` }}
+            >
+              <PlaceMark id={place.id} hot={hot} />
+              <span className={`-mt-1 border-2 border-[#6b3f22] bg-[#f4e7c5] px-2 font-game text-sm leading-tight text-[#3d2914] shadow-[2px_2px_0_#6b3f22] sm:text-base ${hot ? "bg-[#e3b23c]" : ""}`}>
+                {place.label}
+              </span>
+              {hot ? <span className="mt-1 bg-[#fffdf8]/90 px-1 text-xs font-semibold text-primary">{enterLabel}</span> : null}
+            </a>
+          );
+        })}
+        {neighbors.map((person) => {
+          const hot = near === `person:${person.id}` || personId === person.id;
+          return (
+            <button
+              key={person.id}
+              type="button"
+              className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
+              style={{ left: `${person.x}%`, top: `${person.y}%` }}
+              aria-pressed={pinned === person.id}
+              onClick={() => {
+                setPinned(person.id);
+                goal.current = { x: person.x, y: Math.min(88, person.y + 8) };
+              }}
+            >
+              <GardenerSprite className="h-12 w-12" shirt={person.shirt} />
+              <span className={`font-game text-sm text-[#3d2914] ${hot ? "rounded-full bg-[#e3b23c] px-2" : ""}`}>{person.name}</span>
+              {hot ? <span className="mt-1 bg-[#fffdf8]/90 px-1 text-xs font-semibold text-primary">{talkLabel}</span> : null}
+            </button>
+          );
+        })}
+        {(() => {
+          const person = neighbors.find((item) => item.id === personId);
+          if (!person) return null;
+          return (
+            <div className="absolute left-3 right-3 top-3 z-30 mx-auto max-w-sm rounded-2xl border-4 border-[#3d2914] bg-[#fffdf8] p-3 shadow-[4px_4px_0_#3d2914] sm:left-auto sm:right-4 sm:w-80">
+              <div className="flex items-start justify-between gap-2">
+                <p className="font-game text-2xl text-[#3d2914]">{person.name}</p>
+                <button type="button" className="min-h-11 px-2 text-sm font-semibold text-primary" onClick={() => setPinned("off")}>
+                  {closeLabel}
+                </button>
+              </div>
+              <p className="mt-1 text-sm">{person.line}</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <a href={person.href} className="game-btn inline-flex min-h-11 items-center bg-[#215c45] px-3 text-sm font-semibold text-[#f7f3ea]">
+                  {person.action}
+                </a>
+                {guest ? (
+                  <a href={loginHref} className="inline-flex min-h-11 items-center px-2 text-sm font-semibold text-primary underline">
+                    {loginHello}
+                  </a>
+                ) : null}
+              </div>
+            </div>
+          );
+        })()}
         <div className="absolute z-20 -translate-x-1/2 -translate-y-1/2 text-center" style={{ left: `${at.x}%`, top: `${at.y}%` }}>
           <GardenerSprite className="mx-auto h-16 w-16 drop-shadow" shirt={shirtFor(name)} />
           <span className="mt-0.5 inline-block rounded-full bg-[#fffdf8]/90 px-2 font-game text-sm text-[#3d2914]">{name}</span>
@@ -203,15 +285,6 @@ function Pad({ children, label, onDown, onUp }: { children: string; label: strin
     >
       {children}
     </button>
-  );
-}
-
-function Neighbor({ className, label, shirt }: { className: string; label: string; shirt: string }) {
-  return (
-    <div className={`${className} text-center`}>
-      <GardenerSprite className="h-12 w-12" shirt={shirt} />
-      <span className="font-game text-sm text-[#3d2914]">{label}</span>
-    </div>
   );
 }
 

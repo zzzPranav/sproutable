@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const stages = [
   { id: "tree", rank: 6 },
   { id: "youngTree", rank: 5 },
@@ -13,11 +15,13 @@ export function GrowthTree({
   level,
   labels,
   you,
+  youHref,
   start,
 }: {
   level: number;
   labels: Record<StageId, string>;
   you: string;
+  youHref?: string;
   start: string;
 }) {
   const rank = Math.min(6, Math.max(1, level));
@@ -47,7 +51,13 @@ export function GrowthTree({
                     {labels[stage.id]}
                   </p>
                   {state === "now" ? (
-                    <p className="mt-2 inline-flex rounded-full bg-[#e3b23c] px-3 py-1 text-sm font-semibold text-[#3d2914]">{you}</p>
+                    youHref ? (
+                      <Link href={youHref} className="mt-2 inline-flex min-h-11 items-center rounded-full bg-[#e3b23c] px-3 py-1 text-sm font-semibold text-[#3d2914] underline">
+                        {you}
+                      </Link>
+                    ) : (
+                      <p className="mt-2 inline-flex rounded-full bg-[#e3b23c] px-3 py-1 text-sm font-semibold text-[#3d2914]">{you}</p>
+                    )
                   ) : null}
                   {state === "done" ? <p className="mt-1 text-sm text-[#215c45]">✓</p> : null}
                 </div>
